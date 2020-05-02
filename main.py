@@ -5,3 +5,23 @@
 # @File     : main.py
 # @Software : PyCharm
 # @IDE      : PyCharm
+
+import quequ_list
+import spider
+import select
+
+
+Quequ = quequ_list.quequ()
+Spider = spider.spider()
+Select = select.select()
+
+if __name__ == '__main__':
+    urlMSG = Quequ.outputPageUrl()
+    url = urlMSG[0]
+    code = urlMSG[1]
+
+    response = Spider.getHTML(url)
+
+    urlList = Select.selectMain(response, code)
+
+    print(urlList)
