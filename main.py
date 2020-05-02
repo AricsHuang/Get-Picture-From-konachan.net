@@ -13,10 +13,18 @@ from threading import Thread
 import time
 import log_record
 
+######
+## 又拍云账号信息
+######
+bucketName = "你的数据桶名称"
+operatorName = "你的操作员名称"
+password = "你的操作员密码"
+######
+
 
 Quequ = quequ_list.quequ()
 Spider = spiderModule.spider()
-Select = selectModule.select()
+Select = selectModule.select(bucketName, operatorName, password)
 
 flag = []
 

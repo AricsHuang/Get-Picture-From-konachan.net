@@ -9,14 +9,16 @@
 import re
 import log_record
 import pickle
+import upyun
 
 class select():
-    def __init__(self):
+    def __init__(self, bucketName, operatorName, password):
         f = open("data/select.dat", "rb")
         dataDict = pickle.load(f)
         f.close()
         self.selectNum = dataDict['selectNum']
         self.pictureNum = dataDict['pictureNum']
+        self.up = upyun.UpYun(bucketName, operatorName, password)
 
     def selectMain(self, response, code):
         '''
@@ -30,7 +32,7 @@ class select():
             self.pictureNum += 1
             return result
         elif code == 1:  # code=1，代表获取到的response是图片，需要进行保存
-            self.savePic(response)
+            self.upyunSave(response)
             self.pictureNum += 1
             return 0
 
@@ -86,3 +88,31 @@ class select():
             return 0
         except Exception as e:
             log_record.error_record(e, '安全退出保存数据', 'select')
+
+    def upyunSave(self, response):
+        '''
+        直接保存到 又拍云OSS 数据桶
+        如果又拍云保存出现错误，就先暂存本地
+        '''
+        result = response.content
+        filename = response.url.split('/')[-1]
+        self.flag = 0
+        try:
+            res = self.up.put('/'+filename, result, checksum=True, timeout=120)
+            log_record.log_record("[UpYun][Message]", 'UpYun', str(res))
+            return 1
+        except Exception as e:
+            log_record.error_record(e, '又拍云上传图片', 'select-upyun')
+            self.flag = 1
+
+        if self.flag == 1:
+            try:
+                with open('picture/'+filename, 'wb') as tempfile:
+                    tempfile.write(result)
+                self.flag = 0
+                log_record.log_record("[UpYun][Message]", '本地保存', filename)
+                return 0
+            except Exception as e:
+                log_record.error_record(e, '本地保存图片', 'select-upyun')
+                self.flag = 0
+                return 0
