@@ -54,7 +54,7 @@ if __name__ == '__main__':
                 mkSelectData()
                 print("[Message]已经成功创建初始化 data/select.dat ，原文件已覆盖")
             elif code == '3':
-                mkSelectData()
+                mkSpiderData()
                 print("[Message]已经成功创建初始化 data/spider.dat ，原文件已覆盖")
             else:
                 print("[Warming]找不到当前编号的操作.")
