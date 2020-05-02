@@ -12,7 +12,7 @@
 '''
 
 import pickle
-import error_record
+import log_record
 
 class quequ():
     def __init__(self):
@@ -103,7 +103,7 @@ class quequ():
 
             return 0
         except Exception as e:
-            error_record.record(e, '安全退出保存数据', 'quequ')
+            log_record.error_record(e, '安全退出保存数据', 'quequ')
 
 
 

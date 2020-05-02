@@ -11,6 +11,7 @@ import spiderModule
 import selectModule
 from threading import Thread
 import time
+import log_record
 
 
 Quequ = quequ_list.quequ()
@@ -20,6 +21,9 @@ Select = selectModule.select()
 flag = []
 
 def getPage(flag, ThreadName):
+    '''
+    这是获取page页面的线程函数
+    '''
     while(not flag):
         urlMSG = Quequ.outputPageUrl()
         url = urlMSG[0]
@@ -27,39 +31,45 @@ def getPage(flag, ThreadName):
 
         response = Spider.getHTML(url)
 
-        print("[Page][Message]", ThreadName, '|', url)
+        log_record.log_record("[Page][Message]", ThreadName, url)
         if response == -1:
-            print("[Page][Warming]", ThreadName, '|', "Get html error!")
+            log_record.log_record("[Page][Warming]", ThreadName, "Get html error!")
         else:
-            print("[Page][Message]", ThreadName, '|', "Get a page-html.")
+            log_record.log_record("[Page][Message]", ThreadName, "Get a page-html.")
             urlList = Select.selectMain(response, code)
-
-        print("[Page][Message]", ThreadName, '|', "Get a urlList.")
-        inputRerutn = Quequ.inputUrl(urlList)
-        inputNum = inputRerutn['inputNum']
-        print("[Page][Message]", ThreadName, '|', "Input these url. >>", str(inputNum)+'/'+str(len(urlList)))
+            log_record.log_record("[Page][Message]", ThreadName, "Get a urlList.")
+            inputRerutn = Quequ.inputUrl(urlList)
+            inputNum = inputRerutn['inputNum']
+            log_record.log_record("[Page][Message]", ThreadName, "Input these url. >> " + str(inputNum)+'/'+str(len(urlList)))
 
 def getPicture(flag, ThreadName):
+    '''
+    这是获取和保存图片的线程函数
+    '''
     time.sleep(10)
     while(not flag):
         urlMSG = Quequ.outputPicUrl()
         if urlMSG == -1:
             time.sleep(30)
-            print("[Page][Message]", ThreadName, '|', "The Picture-url is empty.")
+            log_record.log_record("[Picture][Message]", ThreadName, "The Picture-url is empty.")
         else:
             url = urlMSG[0]
             code = urlMSG[1]
-            print("[Page][Message]", ThreadName, '|', url)
+            log_record.log_record("[Picture][Message]", ThreadName, url)
 
             response = Spider.getHTML(url)
 
             if response == -1:
-                print("[Page][Warming]", ThreadName, '|', "Get Picture error!")
+                log_record.log_record("[Picture][Message]", ThreadName, "Get Picture error!")
             else:
                 result = Select.selectMain(response, code)
-                print("[Page][Message]", ThreadName, '|', "Get a Picture successful.")
+                log_record.log_record("[Picture][Message]", ThreadName, "Get a Picture successful.")
 
 def saveExit():
+    '''
+    这个函数在退出的时候被进程调用
+    用以保存爬虫的进度
+    '''
     Quequ.saveExit()
     Select.saveExit()
     Spider.saveExit()
@@ -77,16 +87,13 @@ if __name__ == '__main__':
     input_flag = input()
     flag.append(1)
 
-    print("[Program][Message]", '|', "Wait All Thread exit.")
+    log_record.log_record("[Program][Message]", "Program", "Wait All Thread exit.")
 
     for each in ThreadList:
         each.join()
 
     Thread_saveExit.start()
     Thread_saveExit.join()
-    print("[Program][Message]", '|', "Save data successful.")
+    log_record.log_record("[Program][Message]", "Program", "Save data successful.")
 
-    print("Exit successful.")
-
-
-
+    log_record.log_record("[Program][Message]", "Program", "Exit successful.")

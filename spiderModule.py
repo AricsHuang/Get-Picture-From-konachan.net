@@ -7,7 +7,7 @@
 # @IDE      : PyCharm
 
 import requests
-import error_record
+import log_record
 import pickle
 
 class spider:
@@ -30,7 +30,7 @@ class spider:
             return response
         except Exception as e:
             self.falseNum += 1
-            error_record.record(e, "获取网页html", 'spider')  # 记录错误的发生
+            log_record.error_record(e, "获取网页html", 'spider')  # 记录错误的发生
             return -1
 
     def saveExit(self):
@@ -54,6 +54,6 @@ class spider:
 
             return 0
         except Exception as e:
-            error_record.record(e, '安全退出保存数据', 'spider')
+            log_record.error_record(e, '安全退出保存数据', 'spider')
 
 

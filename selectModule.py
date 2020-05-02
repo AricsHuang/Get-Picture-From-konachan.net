@@ -7,7 +7,7 @@
 # @IDE      : PyCharm
 
 import re
-import error_record
+import log_record
 import pickle
 
 class select():
@@ -61,7 +61,7 @@ class select():
             self.pictureNum += 1
             return 0
         except Exception as e:
-            error_record.record(e, '保存图片错误', 'select')
+            log_record.error_record(e, '保存图片错误', 'select')
             return -1
 
     def saveExit(self):
@@ -85,4 +85,4 @@ class select():
 
             return 0
         except Exception as e:
-            error_record.record(e, '安全退出保存数据', 'select')
+            log_record.error_record(e, '安全退出保存数据', 'select')

@@ -2,7 +2,7 @@
 # @Time     : 2020/5/2 下午4:09
 # @Author   : Arics
 # @Email    : 739386753@qq.com
-# @File     : error_record.py
+# @File     : log_record.py
 # @Software : PyCharm
 # @IDE      : PyCharm
 
@@ -13,7 +13,7 @@
 import datetime
 import time
 
-def record(error, type, module):
+def error_record(error, type, module):
     '''
     :param error: 错误代码
     :param type: 错误类型 或 错误描述
@@ -23,8 +23,20 @@ def record(error, type, module):
     try:
         t = time.strftime('%H:%M:%S',time.localtime(time.time()))
         date = datetime.date.today()
-        f = open("log/error_"+str(date)+".dat", "a")
+        f = open("log/error/error_"+str(date)+".dat", "a")
         f.write(str(t)+'\t'+str(type)+'  '+str(error)+'\t'+str(module)+'\n')
+        f.close()
+        return 0
+    except Exception as e:
+        pass
+
+def log_record(type, ThreadName, content):
+    print(type, ThreadName, '|', content)
+    try:
+        t = time.strftime('%H:%M:%S',time.localtime(time.time()))
+        date = datetime.date.today()
+        f = open("log/log/log_"+str(date)+".dat", "a")
+        f.write(str(t)+'\t'+str(type)+'  '+str(ThreadName)+'\t'+str(content)+'\n')
         f.close()
         return 0
     except Exception as e:
