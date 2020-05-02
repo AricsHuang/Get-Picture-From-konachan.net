@@ -7,13 +7,13 @@
 # @IDE      : PyCharm
 
 import quequ_list
-import spider
-import select
+import spiderModule
+import selectModule
 
 
 Quequ = quequ_list.quequ()
-Spider = spider.spider()
-Select = select.select()
+Spider = spiderModule.spider()
+Select = selectModule.select()
 
 if __name__ == '__main__':
     urlMSG = Quequ.outputPageUrl()
@@ -22,6 +22,9 @@ if __name__ == '__main__':
 
     response = Spider.getHTML(url)
 
-    urlList = Select.selectMain(response, code)
+    if response == -1:
+        pass
+    else:
+        urlList = Select.selectMain(response, code)
 
     print(urlList)

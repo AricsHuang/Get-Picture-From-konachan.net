@@ -2,7 +2,7 @@
 # @Time     : 2020/5/2 下午4:28
 # @Author   : Arics
 # @Email    : 739386753@qq.com
-# @File     : spider.py.py
+# @File     : spiderModule.py.py
 # @Software : PyCharm
 # @IDE      : PyCharm
 
@@ -21,7 +21,7 @@ class spider:
         '''
         try:
             response = requests.get(url=url, headers=self.headers)
-            response.encoding = r.apparent_encoding
+            response.encoding = response.apparent_encoding
             response.raise_for_status()
             return response
         except Exception as e:

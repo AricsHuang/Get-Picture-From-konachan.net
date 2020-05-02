@@ -2,7 +2,7 @@
 # @Time     : 2020/5/2 下午4:37
 # @Author   : Arics
 # @Email    : 739386753@qq.com
-# @File     : select.py
+# @File     : selectModule.py
 # @Software : PyCharm
 # @IDE      : PyCharm
 
@@ -18,12 +18,12 @@ class select():
         '''
         外部程序调用的函数
         '''
-        if code == '-1':  # code=-1，代表response获取失败，不需要进行筛选了
+        if code == -1:  # code=-1，代表response获取失败，不需要进行筛选了
             return 0
-        elif code == '0':  # code=0，代表response是page，需要进一步筛选获取图片链接列表
+        elif code == 0:  # code=0，代表response是page，需要进一步筛选获取图片链接列表
             result = self.getPicList(response.text)
             return result
-        elif code == '1':  # code=1，代表获取到的response是图片，需要进行保存
+        elif code == 1:  # code=1，代表获取到的response是图片，需要进行保存
             self.savePic()
             return 0
 
@@ -33,6 +33,9 @@ class select():
         '''
         re_url = re.compile(r'(https://konachan[.]+net/(jpeg|image).*?[.]+jpg)')
         group = re.findall(re_url, html)
+        # print("####")
+        # print("##", group)
+        # print("####")
         urlList = []
         group = list(set(group))
         for each in group:
