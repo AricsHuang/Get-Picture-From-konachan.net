@@ -67,12 +67,19 @@ class quequ():
 
 
     def inputUrl(self, urlList):
+        '''
+        通过外部程序调用，向队列中写入信息
+        返回写入的链接数量
+        '''
+        t = 0  # 计算写入的链接数量
         for each in urlList:
             if each not in self.success:
+                t +=1
                 if each.endswith(".jpg"):
                     self.waitPic.append(each)
                 else:
                     self.wait.append(each)
+        return {'inputNum': t}
 
 
     def saveExit(self):

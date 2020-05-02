@@ -23,7 +23,7 @@ def record(error, type, module):
     try:
         t = time.strftime('%H:%M:%S',time.localtime(time.time()))
         date = datetime.date.today()
-        f = open("data/error_"+str(date)+".dat", "a")
+        f = open("log/error_"+str(date)+".dat", "a")
         f.write(str(t)+'\t'+str(type)+'  '+str(error)+'\t'+str(module)+'\n')
         f.close()
         return 0
