@@ -82,7 +82,7 @@ def getPicture(flag, ThreadName):
 def moni(sendTime, flag):
     i = 0
     while(not flag):
-        if i == 10:
+        if i >= 10:
             Monitor.monitorMain(1)
         else:
             Monitor.monitorMain(0)

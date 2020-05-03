@@ -117,8 +117,8 @@ class monitor():
             msg = f.read()
 
         '''发送邮件的条件'''
-        # if Error_v >= 1:
-        if True:
+        if Error_v >= 5:
+        # if True:
             self.sendMail(msg, '错误数量超预期')
             self.sendMailNum += 1
 
