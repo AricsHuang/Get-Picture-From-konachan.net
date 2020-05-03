@@ -29,7 +29,6 @@ class select():
             return 0
         elif code == 0:  # code=0，代表response是page，需要进一步筛选获取图片链接列表
             result = self.getPicList(response.text)
-            self.pictureNum += 1
             return result
         elif code == 1:  # code=1，代表获取到的response是图片，需要进行保存
             self.upyunSave(response)

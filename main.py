@@ -12,6 +12,7 @@ import selectModule
 from threading import Thread
 import time
 import log_record
+import monitor
 
 ######
 ## 又拍云账号信息
@@ -19,12 +20,17 @@ import log_record
 bucketName = "你的数据桶名称"
 operatorName = "你的操作员名称"
 password = "你的操作员密码"
+
 ######
+## 邮件设置
+######
+sendTime = 60    # 邮件发送时间间隔（s）
 
 
 Quequ = quequ_list.quequ()
-Spider = spiderModule.spider()
 Select = selectModule.select(bucketName, operatorName, password)
+Spider = spiderModule.spider(Quequ)
+Monitor = monitor.monitor(Quequ, Spider, Select)
 
 flag = []
 
@@ -73,6 +79,16 @@ def getPicture(flag, ThreadName):
                 result = Select.selectMain(response, code)
                 log_record.log_record("[Picture][Message]", ThreadName, "Get a Picture successful.")
 
+def moni(sendTime, flag):
+    i = 0
+    while(not flag):
+        if i == 10:
+            Monitor.monitorMain(1)
+        else:
+            Monitor.monitorMain(0)
+        i += 1
+        time.sleep(sendTime)
+
 def saveExit():
     '''
     这个函数在退出的时候被进程调用
@@ -85,9 +101,10 @@ def saveExit():
 if __name__ == '__main__':
     Thread_Page_1 = Thread(name="Page-1", target=getPage, args=(flag, "Page-1"))
     Thread_Picture_1 = Thread(name="Picture-1", target=getPicture, args=(flag, "Picture-1"))
+    Thread_Monitor = Thread(name="Monitor", target=moni, args=(sendTime, flag))
     Thread_saveExit = Thread(name="saveExit", target=saveExit)
 
-    ThreadList = [Thread_Picture_1, Thread_Page_1]
+    ThreadList = [Thread_Picture_1, Thread_Page_1, Thread_Monitor]
 
     for each in ThreadList:
         each.start()

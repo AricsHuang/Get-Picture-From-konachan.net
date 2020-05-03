@@ -11,7 +11,8 @@ import log_record
 import pickle
 
 class spider:
-    def __init__(self):
+    def __init__(self, _quequ):
+        self.Quequ = _quequ
         self.headers = {
             "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.129 Safari/537.36",
         }
@@ -27,9 +28,11 @@ class spider:
             response.encoding = response.apparent_encoding
             response.raise_for_status()
             self.successNum += 1
+            self.Quequ.success.append(url)
             return response
         except Exception as e:
             self.falseNum += 1
+            self.Quequ.false.append(url)
             log_record.error_record(e, "获取网页html", 'spider')  # 记录错误的发生
             return -1
 
